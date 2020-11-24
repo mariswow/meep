@@ -533,7 +533,12 @@
 
 (define (fields-add-fluxish-stuff add-dft-stuff fields fcen df nfreq stufflist . nperiods)
   (define vl '()) ; volume_list of flux regions
+  (display "\nstructuredet: f:\nstrucuredet: ")
   (map (lambda (f)
+	 (display (object-property-value f 'center))
+	 (display ";")
+	 (display (object-property-value f 'size))
+	 (display ";")
 	 (let* ((v (volume (center (object-property-value f 'center))
 			    (size (object-property-value f 'size))))
 		(d0 (object-property-value f 'direction))
@@ -549,6 +554,7 @@
 		  (object-property-value f 'weight)
 		  vl))))
        stufflist)
+  (display "\n")
   (let ((stuff
          (if (eq? add-dft-stuff meep-fields-add-dft-near2far)
              (add-dft-stuff fields vl
