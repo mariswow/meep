@@ -1,3 +1,5 @@
+Fork includes routines to help visualize structure with the Scheme interface.
+
 ![](doc/docs/images/Meep-banner.png)
 
 [![Latest Docs](https://readthedocs.org/projects/meep/badge/?version=latest)](http://meep.readthedocs.io/en/latest/)
