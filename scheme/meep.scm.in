@@ -16,6 +16,12 @@
 
 ; ****************************************************************
 
+; for storing flux region data
+(define flux-centers (list ))
+(define flux-sizes (list ))
+
+; ****************************************************************
+
 ; for define* (keyword args) in guile 1.8
 (if (< (string->number (major-version)) 2)
     (use-modules (ice-9 optargs)))
@@ -533,12 +539,9 @@
 
 (define (fields-add-fluxish-stuff add-dft-stuff fields fcen df nfreq stufflist . nperiods)
   (define vl '()) ; volume_list of flux regions
-  (display "\nstructuredet: f:\nstrucuredet: ")
   (map (lambda (f)
-	 (display (object-property-value f 'center))
-	 (display ";")
-	 (display (object-property-value f 'size))
-	 (display ";")
+	 (set! flux-centers (append flux-centers (list (object-property-value f 'center))))
+	 (set! flux-sizes (append flux-sizes (list (object-property-value f 'size))))
 	 (let* ((v (volume (center (object-property-value f 'center))
 			    (size (object-property-value f 'size))))
 		(d0 (object-property-value f 'direction))
@@ -554,7 +557,6 @@
 		  (object-property-value f 'weight)
 		  vl))))
        stufflist)
-  (display "\n")
   (let ((stuff
          (if (eq? add-dft-stuff meep-fields-add-dft-near2far)
              (add-dft-stuff fields vl
@@ -1429,6 +1431,38 @@
   (if (null? fields)
       (error "init-fields is required before using field-energy-in-box"))
   (meep-fields-field-energy-in-box fields box))
+
+; ****************************************************************
+; Structure printing functions
+
+(define (display-structure-details)
+	(print "structuredet: g:\n")
+	(print "structuredet: ")
+	(print (object-property-value geometry-lattice 'size))
+	(print "\nstructuredet: p:\nstructuredet: ")
+	(do ((i 0 (+ i 1))) ((>= i (length pml-layers)))
+		(print (object-property-value (list-ref pml-layers i) 'direction))
+		(print ";")
+		(print (object-property-value (list-ref pml-layers i) 'thickness))
+		(print ";")
+	)
+	(print "\nstructuredet: s:\nstructuredet: ")
+	(do ((i 0 (+ i 1))) ((>= i (length sources)))
+		(print (object-property-value (list-ref sources i) 'center))
+		(print ";")
+		(print (object-property-value (list-ref sources i) 'size))
+		(print ";")
+	)
+	(print "\nstructuredet: f:\nstructuredet: ")
+	(do ((i 0 (+ i 1))) ((>= i (length flux-centers)))
+		(print (list-ref flux-centers i))
+		(print ";")
+		(print (list-ref flux-sizes i))
+		(print ";")
+	)
+	(print "\n")
+)
+
 
 ; ****************************************************************
 ; Load helper functions for Casimir-force calculations
