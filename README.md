@@ -2,7 +2,7 @@
 
 Fork includes routines to help visualize structure with the Scheme interface.
 
-The fork simply adds an additional function which prints out monitors, sources and etc., which can then be parsed by an external visualizer. Call `(display-structure-details` function to access this capability.
+The fork simply adds an additional function which prints out monitors, sources and etc., which can then be parsed by an external visualizer. Call `(display-structure-details)` function to access this capability.
 
 A visualizer made by me, which pretty much copies the visualizer made for the meep Python interface, can be found [here](https://github.com/mariusCZ/meep-scheme-visualization).
 
